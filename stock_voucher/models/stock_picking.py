@@ -12,6 +12,7 @@ class StockPicking(models.Model):
     number_of_packages = fields.Integer(
         string='Number of Packages',
         copy=False,
+        compute='_compute_number_of_packages',
     )
     book_id = fields.Many2one(
         'stock.book',
@@ -37,6 +38,10 @@ class StockPicking(models.Model):
     )
     automatic_declare_value = fields.Boolean(
         related='picking_type_id.automatic_declare_value',
+    )
+
+    automatic_number_of_packages = fields.Boolean(
+        related='picking_type_id.automatic_number_of_packages',
     )
     book_required = fields.Boolean(
         related='picking_type_id.book_required',
@@ -138,6 +143,17 @@ class StockPicking(models.Model):
         if res is None and len(self) == 1 and self.book_required:
             return self.do_print_voucher()
         return res
+
+    def _compute_number_of_packages(self):
+        if self.filtered('automatic_number_of_packages'):
+            move_lines_ids = []
+            for line in self.move_lines:
+                move_lines_ids.append(line.id)
+
+            package_qty = self.env['stock.quant.package'].search_count([('id', 'in', move_lines_ids)])
+            self.number_of_packages = package_qty
+        else:
+            self.number_of_packages = 0
 
     @api.depends(
         'automatic_declare_value',

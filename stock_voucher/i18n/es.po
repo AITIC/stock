@@ -42,6 +42,12 @@ msgid "Automatic Declare Value"
 msgstr "Valor declarado automático"
 
 #. module: stock_voucher
+#: model:ir.model.fields,field_description:stock_voucher.field_stock_picking__automatic_number_of_packages
+#: model:ir.model.fields,field_description:stock_voucher.field_stock_picking_type__automatic_number_of_packages
+msgid "Automatic Number Of Packages"
+msgstr "Número de Paquetes automático"
+
+#. module: stock_voucher
 #: model:ir.model,name:stock_voucher.model_stock_backorder_confirmation
 msgid "Backorder Confirmation"
 msgstr "Confirmación de entrega parcial"
