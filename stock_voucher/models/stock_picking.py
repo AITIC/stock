@@ -12,6 +12,7 @@ class StockPicking(models.Model):
     number_of_packages = fields.Integer(
         string='Number of Packages',
         copy=False,
+        default=1,
         compute='_compute_number_of_packages',
     )
     book_id = fields.Many2one(
@@ -146,14 +147,11 @@ class StockPicking(models.Model):
 
     def _compute_number_of_packages(self):
         if self.filtered('automatic_number_of_packages'):
-            move_lines_ids = []
-            for line in self.move_lines:
-                move_lines_ids.append(line.id)
-
-            package_qty = self.env['stock.quant.package'].search_count([('id', 'in', move_lines_ids)])
+            packages = self.move_line_ids.mapped('result_package_id')
+            package_qty = self.env['stock.quant.package'].search_count([('id', 'in', packages.ids)])
             self.number_of_packages = package_qty
         else:
-            self.number_of_packages = 0
+            self.number_of_packages = 1
 
     @api.depends(
         'automatic_declare_value',
