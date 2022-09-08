@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Stock UX',
-    'version': "15.0.1.1.0",
+    'version': "15.0.1.1.1",
     'category': 'Warehouse Management',
     'sequence': 14,
     'summary': '',
@@ -30,7 +30,7 @@
     ],
     'depends': [
         'sale_stock',
-        'report_aeroo',
+        # 'report_aeroo',
         'stock_voucher',
     ],
     'data': [
@@ -50,7 +50,7 @@
         'views/report_deliveryslip.xml',
         'wizards/stock_operation_wizard_views.xml',
         'wizards/res_config_settings_views.xml',
-        'report/stock_ux_report.xml',
+        # 'report/stock_ux_report.xml',
     ],
     'demo': [
     ],
