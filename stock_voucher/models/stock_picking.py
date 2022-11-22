@@ -153,6 +153,9 @@ class StockPicking(models.Model):
         else:
             self.number_of_packages = 1
 
+    def action_recalculate_declared_value(self):
+        self._compute_declared_value()
+
     @api.depends(
         'automatic_declare_value',
         'move_lines.state',

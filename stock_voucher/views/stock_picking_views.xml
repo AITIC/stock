@@ -49,6 +49,10 @@
                 <button name="%(action_stock_print_voucher)d" string="Vouchers" type="action" attrs="{'invisible': ['|',('book_id','=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}" context="{'picking_id': id}"/>
                 <button name="%(action_stock_print_voucher)d" string="Vouchers" type="action" attrs="{'invisible': ['|',('book_id','!=',False),'|', ('picking_type_code','=','incoming'), ('state','!=','done')]}" class="oe_highlight" context="{'picking_id': id}"/>
             </button>
+             <xpath expr="//header//button[last()]"  position="after">
+                    <button name="action_recalculate_declared_value" string="Recalculate Declared Value" groups="stock.group_stock_manager"
+                            type="object"/>
+            </xpath>
         </field>
     </record>
 

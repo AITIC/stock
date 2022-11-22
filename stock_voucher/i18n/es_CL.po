@@ -407,3 +407,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:stock_voucher.view_print_stock_voucher_form
 msgid "or"
 msgstr "o"
+
+#. module: stock_voucher
+#: model_terms:ir.ui.view,arch_db:stock_voucher.view_picking_form
+msgid "Recalculate Declared Value"
+msgstr "Recalcular valor declarado"
