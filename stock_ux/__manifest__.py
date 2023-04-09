@@ -50,7 +50,7 @@
         'views/report_deliveryslip.xml',
         'wizards/stock_operation_wizard_views.xml',
         'wizards/res_config_settings_views.xml',
-        'report/stock_ux_report.xml',
+        #'report/stock_ux_report.xml',
         'report/report_stock_forecasted.xml',
     ],
     'demo': [
