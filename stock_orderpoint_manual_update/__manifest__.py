@@ -45,7 +45,7 @@
         ],
     },
     'uninstall_hook': "uninstall_hook",
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
