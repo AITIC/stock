@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Stock UX',
-    'version': "17.0.1.4.0",
+    'version': "17.0.1.8.0",
     'category': 'Warehouse Management',
     'sequence': 14,
     'summary': '',
@@ -29,10 +29,6 @@
     ],
     'depends': [
         'sale_stock',
-        'report_aeroo',
-        'stock_voucher',
-        'stock_barcode',
-        'mail',
     ],
     'data': [
         'security/stock_ux_security.xml',
@@ -50,9 +46,9 @@
         'views/report_deliveryslip.xml',
         'views/res_config_settings_views.xml',
         'wizards/stock_operation_wizard_views.xml',
-        'report/stock_ux_report.xml',
         'report/ir.action.reports.xml',
         'report/picking_templates.xml',
+        'views/res_company_views.xml'
     ],
     'installable': True,
     'auto_install': False,

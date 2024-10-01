@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Stock Voucher',
-    'version': "17.0.1.0.0",
+    'version': "17.0.1.1.0",
     'category': 'Warehouse Management',
     'sequence': 14,
     'summary': '',
@@ -30,7 +30,8 @@
     ],
     'depends': [
         'sale_stock',
-        'web_ir_actions_act_multi'
+        'web_ir_actions_act_multi',
+        'stock_ux'
     ],
     'data': [
         'security/stock_voucher_security.xml',
