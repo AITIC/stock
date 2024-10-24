@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+
+    <record model="report.mimetypes" id="report_mimetypes_xls_odt">
+		    <field name="name">Microsoft Excel 97/2000/XP (.xls)</field>
+		    <field name="code">oo-xls</field>
+		    <field name="compatible_types">oo-ods</field>
+		    <field name="filter_name">MS Excel 97</field>
+	    </record>
+
+          
+</odoo>
