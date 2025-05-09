@@ -72,24 +72,22 @@ class StockPicking(models.Model):
             self.move_ids.update(
                 {'location_dest_id': self.location_dest_id.id})
 
-    def _send_confirmation_email(self):
-        for rec in self:
-            if rec.picking_type_id.mail_template_id:
-                try:
-                    rec.message_post_with_source(rec.picking_type_id.mail_template_id)
-                except Exception as error:
-                    title = _(
-                        "ERROR: Picking was not sent via email"
-                    )
-                    rec.message_post(body="<br/><br/>".join([
-                        "<b>" + title + "</b>",
-                        _("Please check the email template associated with"
-                            " the picking type."),
-                        "<code>" + str(error) + "</code>"
-                    ]), body_is_html=True
-                    )
-            else:
-                super(StockPicking, self)._send_confirmation_email()
+    def _action_done(self):
+        for rec in self.with_context(mail_notify_force_send=False).filtered('picking_type_id.mail_template_id'):
+            try:
+                rec.message_post_with_template(rec.picking_type_id.mail_template_id.id)
+            except Exception as error:
+                title = _(
+                    "ERROR: Picking was not sent via email"
+                )
+                rec.message_post(body="<br/><br/>".join([
+                    "<b>" + title + "</b>",
+                    _("Please check the email template associated with"
+                      " the picking type."),
+                    "<code>" + str(error) + "</code>"
+                ]),
+                )
+        return super()._action_done()
 
     def new_force_availability(self):
         self.action_assign()
@@ -101,7 +99,7 @@ class StockPicking(models.Model):
                 rec.quantity = rec.product_uom_qty
             else:
                 for line in rec.move_line_ids:
-                    line.quantity = line.reserved_uom_qty
+                    line.quantity = line.quantity_product_uom
 
     def _put_in_pack(self, move_line_ids):
         # we send to skip a process of check qty when is sending through the copy method.

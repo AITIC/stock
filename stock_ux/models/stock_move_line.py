@@ -65,20 +65,24 @@ class StockMoveLine(models.Model):
                 lambda x:
                 not x.location_id.should_bypass_reservation() and
                 x.picking_id.picking_type_id.block_manual_lines and
-                x.reserved_qty < x.quantity)):
+                x._check_quantity_available() < 0)):
             raise ValidationError(_(
-                "You can't transfer more quantity than reserved one!"))
+                "You can't transfer more quantity than the quantity on stock for product: %s.") % self.name)
 
-    @api.constrains('quantity')
-    def _check_quantity(self):
-        """If we work on move lines we want to ensure quantities are ok"""
-        if self._context.get('put_in_pack', False):
-            return
-        self.mapped('move_id')._check_quantity()
-        # We verify the case that does not have 'move_id' to restrict how does_check_quantity() in moves
-        if any(self.filtered(lambda x: not x.move_id and x.picking_id.picking_type_id.block_additional_quantity)):
-            raise ValidationError(
-                _('You can not transfer more than the initial demand!'))
+    def _check_quantity_available(self):
+        self.ensure_one()
+        total_available = 0.0
+        if self.product_id.detailed_type == 'product' and not self.env.context.get('trigger_assign') and not self.env.context.get('from_inverse_qty_done') and not self.env.context.get('sale_automation'):
+            locations = self.env['stock.location'].search([
+                ('id', 'child_of', self.picking_id.location_id.id),
+                ('company_id', '=', self.picking_id.company_id.id)
+            ])
+            quants = self.env['stock.quant'].search([
+                ('product_id', '=', self.product_id.id),
+                ('location_id', 'in', locations.ids)
+            ])
+            total_available = sum(quants.mapped('available_quantity')) - self.quantity
+        return total_available
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -102,6 +106,10 @@ class StockMoveLine(models.Model):
                 if moves:
                     aggregated_move_lines[line]['description'] = False
                     aggregated_move_lines[line]['name'] = ', '.join(moves.mapped('origin_description'))
-        
+
         return aggregated_move_lines
 
+    def _inverse_qty_done(self):
+        for line in self:
+            line.with_context(from_inverse_qty_done=True).quantity = line.qty_done
+            line.picked = line.quantity > 0
